@@ -1,0 +1,18 @@
+{
+  "name": "医院排班助手",
+  "short_name": "排班助手",
+  "description": "医院6天轮班排班提醒，支持调班管理",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#43A047",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2343A047'/><text y='.72em' font-size='60' text-anchor='middle' x='50' fill='white'>🏥</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

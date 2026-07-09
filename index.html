@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#43A047">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="排班助手">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2343A047'/><text y='.72em' font-size='60' text-anchor='middle' x='50' fill='white'>🏥</text></svg>">
+<title>🏥 医院排班助手</title>
+<style>
+/* ========== 基础样式 ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --门诊: #43A047; --门诊-bg: #E8F5E9; --门诊-light: #C8E6C9;
+  --住院: #1E88E5; --住院-bg: #E3F2FD; --住院-light: #BBDEFB;
+  --夜班: #FB8C00; --夜班-bg: #FFF3E0; --夜班-light: #FFE0B2;
+  --休息: #78909C; --休息-bg: #ECEFF1; --休息-light: #CFD8DC;
+  --today-border: #FFD600;
+  --swapped-border: #E91E63;
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --text: #263238;
+  --text-secondary: #607D8B;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --radius: 12px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+               "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* ========== 顶部导航 ========== */
+.header {
+  background: var(--card);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header h1 { font-size: 1.4em; display: flex; align-items: center; gap: 8px; }
+.header-actions { display: flex; gap: 8px; }
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.btn:active { transform: translateY(0); }
+.btn-primary { background: #5C6BC0; color: white; }
+.btn-outline { background: white; color: #5C6BC0; border: 1.5px solid #5C6BC0; }
+.btn-sm { padding: 5px 12px; font-size: 0.82em; }
+.btn-danger { background: #EF5350; color: white; }
+
+/* ========== 主容器 ========== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ========== 今日班次卡片 ========== */
+.today-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.today-card .date-label {
+  font-size: 0.95em;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.today-card .shift-icon {
+  font-size: 3.5em;
+  margin-bottom: 4px;
+}
+.today-card .shift-name {
+  font-size: 2em;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.today-card .shift-detail {
+  font-size: 0.95em;
+  color: var(--text-secondary);
+}
+.today-card .swapped-badge {
+  display: inline-block;
+  background: #E91E63;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.78em;
+  margin-top: 8px;
+}
+/* 颜色条 */
+.today-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+}
+.today-card.shift-门诊::before { background: var(--门诊); }
+.today-card.shift-住院::before { background: var(--住院); }
+.today-card.shift-夜班::before { background: var(--夜班); }
+.today-card.shift-休息::before { background: var(--休息); }
+.today-card.shift-门诊 .shift-icon,
+.today-card.shift-门诊 .shift-name { color: var(--门诊); }
+.today-card.shift-住院 .shift-icon,
+.today-card.shift-住院 .shift-name { color: var(--住院); }
+.today-card.shift-夜班 .shift-icon,
+.today-card.shift-夜班 .shift-name { color: var(--夜班); }
+.today-card.shift-休息 .shift-icon,
+.today-card.shift-休息 .shift-name { color: var(--休息); }
+
+/* ========== 未来几天条 ========== */
+.upcoming-strip {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.upcoming-item {
+  flex: 0 0 auto;
+  min-width: 90px;
+  background: var(--card);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  font-size: 0.85em;
+}
+.upcoming-item .day-name { font-weight: 600; margin-bottom: 4px; }
+.upcoming-item .day-date { color: var(--text-secondary); font-size: 0.85em; margin-bottom: 6px; }
+.upcoming-item .dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+.dot-门诊 { background: var(--门诊); }
+.dot-住院 { background: var(--住院); }
+.dot-夜班 { background: var(--夜班); }
+.dot-休息 { background: var(--休息); }
+
+/* ========== 日历 ========== */
+.calendar-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.calendar-header .month-label {
+  font-size: 1.15em;
+  font-weight: 700;
+}
+.calendar-nav { display: flex; gap: 6px; }
+.calendar-nav button {
+  width: 34px; height: 34px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calendar-nav button:hover { background: #f5f5f5; }
+.calendar-nav .btn-today { width: auto; padding: 0 12px; font-size: 0.85em; }
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.calendar-grid .day-header {
+  text-align: center;
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 8px 0;
+}
+.calendar-grid .day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.15s;
+  border: 2px solid transparent;
+  min-width: 0;
+}
+.calendar-grid .day-cell:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 2;
+}
+.calendar-grid .day-cell.other-month {
+  opacity: 0.3;
+  cursor: default;
+}
+.calendar-grid .day-cell.other-month:hover {
+  transform: none;
+  box-shadow: none;
+}
+.calendar-grid .day-cell.today {
+  border-color: var(--today-border) !important;
+  box-shadow: 0 0 0 3px rgba(255,214,0,0.25);
+}
+.calendar-grid .day-cell.swapped {
+  border-style: dashed;
+  border-color: var(--swapped-border) !important;
+}
+.calendar-grid .day-cell .cell-num {
+  font-size: 0.95em;
+  font-weight: 600;
+}
+.calendar-grid .day-cell .cell-label {
+  font-size: 0.6em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+/* 班次颜色 */
+.calendar-grid .day-cell.cell-门诊 { background: var(--门诊-bg); color: var(--门诊); }
+.calendar-grid .day-cell.cell-住院 { background: var(--住院-bg); color: var(--住院); }
+.calendar-grid .day-cell.cell-夜班 { background: var(--夜班-bg); color: var(--夜班); }
+.calendar-grid .day-cell.cell-休息 { background: var(--休息-bg); color: var(--休息); }
+
+/* ========== 图例 ========== */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85em;
+}
+.legend-dot {
+  width: 14px; height: 14px;
+  border-radius: 4px;
+}
+.legend-dot.lg-门诊 { background: var(--门诊-bg); border: 2px solid var(--门诊); }
+.legend-dot.lg-住院 { background: var(--住院-bg); border: 2px solid var(--住院); }
+.legend-dot.lg-夜班 { background: var(--夜班-bg); border: 2px solid var(--夜班); }
+.legend-dot.lg-休息 { background: var(--休息-bg); border: 2px solid var(--休息); }
+.legend-dot.lg-调班 { background: white; border: 2px dashed var(--swapped-border); }
+
+/* ========== 调班记录面板 ========== */
+.swap-log-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+.swap-log-card h3 {
+  font-size: 1em;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.swap-table { width: 100%; border-collapse: collapse; font-size: 0.88em; }
+.swap-table th, .swap-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+.swap-table th { color: var(--text-secondary); font-weight: 600; }
+.swap-table .empty-row td { text-align: center; color: #bbb; padding: 24px; }
+.swap-table .badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.82em;
+  font-weight: 500;
+}
+.badge-门诊 { background: var(--门诊-bg); color: var(--门诊); }
+.badge-住院 { background: var(--住院-bg); color: var(--住院); }
+.badge-夜班 { background: var(--夜班-bg); color: var(--夜班); }
+.badge-休息 { background: var(--休息-bg); color: var(--休息); }
+
+/* ========== 弹窗 ========== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  max-width: 440px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.modal h3 { margin-bottom: 18px; font-size: 1.15em; }
+.modal .form-group { margin-bottom: 16px; }
+.modal label { display: block; font-size: 0.88em; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+.modal input[type="date"],
+.modal select,
+.modal textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95em;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+.modal input:focus, .modal select:focus, .modal textarea:focus {
+  outline: none;
+  border-color: #5C6BC0;
+}
+.modal textarea { resize: vertical; min-height: 60px; }
+.modal .btn-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+/* ========== Toast ========== */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 0.9em;
+  z-index: 300;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+/* ========== 响应式 ========== */
+@media (max-width: 600px) {
+  .container { padding: 12px; }
+  .today-card { padding: 20px; }
+  .today-card .shift-name { font-size: 1.5em; }
+  .today-card .shift-icon { font-size: 2.5em; }
+  .calendar-card { padding: 12px; }
+  .calendar-grid { gap: 2px; }
+  .calendar-grid .day-cell { font-size: 0.78em; border-radius: 6px; }
+  .calendar-grid .day-cell .cell-label { font-size: 0.55em; }
+  .modal { padding: 20px; }
+}
+
+/* 打印样式 */
+@media print {
+  .header, .btn, .swap-log-card, .modal-overlay, .toast { display: none !important; }
+  .container { max-width: 100%; padding: 0; }
+  .calendar-card { box-shadow: none; break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部 -->
+<header class="header">
+  <h1>🏥 排班助手</h1>
+  <div class="header-actions">
+    <button class="btn btn-outline btn-sm" onclick="exportICS()" title="导出日历文件到手机">📱 导出日历</button>
+    <button class="btn btn-outline btn-sm" onclick="openSettings()">⚙️ 设置</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- 今日班次 -->
+  <div class="today-card" id="todayCard">
+    <div class="date-label" id="todayDateLabel"></div>
+    <div class="shift-icon" id="todayIcon"></div>
+    <div class="shift-name" id="todayShift"></div>
+    <div class="shift-detail" id="todayDetail"></div>
+    <div class="swapped-badge" id="todaySwappedBadge" style="display:none">🔄 已调班</div>
+  </div>
+
+  <!-- 未来7天 -->
+  <div class="upcoming-strip" id="upcomingStrip"></div>
+
+  <!-- 月历 -->
+  <div class="calendar-card">
+    <div class="calendar-header">
+      <span class="month-label" id="monthLabel"></span>
+      <div class="calendar-nav">
+        <button onclick="navMonth(-1)" title="上个月">◀</button>
+        <button class="btn-today" onclick="goToday()">今天</button>
+        <button onclick="navMonth(1)" title="下个月">▶</button>
+      </div>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+
+  <!-- 图例 -->
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot lg-门诊"></span> 门诊药房</span>
+    <span class="legend-item"><span class="legend-dot lg-住院"></span> 住院药房</span>
+    <span class="legend-item"><span class="legend-dot lg-夜班"></span> 上午+夜班</span>
+    <span class="legend-item"><span class="legend-dot lg-休息"></span> 休息</span>
+    <span class="legend-item"><span class="legend-dot lg-调班"></span> 已调班</span>
+  </div>
+
+  <!-- 调班记录 -->
+  <div class="swap-log-card" id="swapLogCard">
+    <h3>🔄 调班记录</h3>
+    <table class="swap-table">
+      <thead><tr><th>日期</th><th>原班次</th><th>调为</th><th>备注</th><th>操作</th></tr></thead>
+      <tbody id="swapTableBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- 日期详情弹窗 -->
+<div class="modal-overlay" id="dayModal">
+  <div class="modal">
+    <h3 id="dayModalTitle">📅 日期详情</h3>
+    <div class="form-group">
+      <label>日期</label>
+      <input type="text" id="dayModalDate" readonly style="background:#f5f5f5">
+    </div>
+    <div class="form-group">
+      <label>当前班次</label>
+      <input type="text" id="dayModalCurrentShift" readonly style="background:#f5f5f5">
+    </div>
+    <div class="form-group" id="dayModalSwapNoteGroup" style="display:none">
+      <label>调班备注</label>
+      <input type="text" id="dayModalCurrentNote" readonly style="background:#f5f5f5">
+    </div>
+    <hr style="border:none; border-top:1px solid #eee; margin:16px 0">
+    <div class="form-group">
+      <label>调班操作 — 改为以下班次</label>
+      <select id="dayModalNewShift">
+        <option value="">— 不调整（保持原班次）—</option>
+        <option value="门诊药房">🏥 门诊药房</option>
+        <option value="住院药房">🏨 住院药房</option>
+        <option value="上午+夜班">🌙 上午+夜班</option>
+        <option value="休息">🏠 休息</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>调班原因 / 与谁调班（选填）</label>
+      <textarea id="dayModalNote" placeholder="例如：与张三调班，他帮我上门诊，我替他上夜班"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-danger btn-sm" id="dayModalResetBtn" style="display:none" onclick="resetSwap()">↩ 恢复原班次</button>
+      <button class="btn btn-outline btn-sm" onclick="closeDayModal()">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="saveSwap()">💾 保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 设置弹窗 -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <h3>⚙️ 设置</h3>
+    <div class="form-group">
+      <label>📅 轮班起始日期（哪天是第1天·门诊药房）</label>
+      <input type="date" id="settingsAnchorDate">
+      <small style="color:var(--text-secondary)">设置后，系统会自动计算每一天的班次</small>
+    </div>
+    <div class="form-group">
+      <label>🔔 每日提醒时间（需要页面保持打开）</label>
+      <input type="time" id="settingsReminderTime" value="08:00">
+      <small style="color:var(--text-secondary)">到时间会弹出浏览器通知</small>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline btn-sm" onclick="closeSettings()">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="saveSettings()">💾 保存设置</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== 核心数据与逻辑 ====================
+
+const SHIFT_TYPES = ['门诊药房', '住院药房', '上午+夜班', '休息', '休息', '休息'];
+const SHIFT_ICONS = { '门诊药房': '💊', '住院药房': '🏨', '上午+夜班': '🌙', '休息': '🏠' };
+const SHIFT_DETAILS = {
+  '门诊药房': '全天 · 门诊药房值班',
+  '住院药房': '全天 · 住院药房值班',
+  '上午+夜班': '上午半天班 + 18:00→次日8:00 夜班',
+  '休息': '今天休息，好好放松 🎉'
+};
+const SHIFT_CSS_CLASS = {
+  '门诊药房': '门诊',
+  '住院药房': '住院',
+  '上午+夜班': '夜班',
+  '休息': '休息'
+};
+
+// 存储键
+const STORAGE_KEY_ANCHOR = 'schedule_anchor_date';
+const STORAGE_KEY_SWAPS = 'schedule_swaps';
+const STORAGE_KEY_REMINDER = 'schedule_reminder_time';
+
+// 默认起始日期（2026-07-06 作为第1天·门诊药房，仅示例）
+const DEFAULT_ANCHOR = '2026-07-06';
+
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let selectedDayDate = null; // 当前弹窗操作的日期
+
+// ==================== 数据存取 ====================
+
+function getAnchorDate() {
+  const saved = localStorage.getItem(STORAGE_KEY_ANCHOR);
+  return saved ? new Date(saved + 'T00:00:00') : new Date(DEFAULT_ANCHOR + 'T00:00:00');
+}
+
+function setAnchorDate(dateStr) {
+  localStorage.setItem(STORAGE_KEY_ANCHOR, dateStr);
+}
+
+function getSwaps() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY_SWAPS) || '{}');
+  } catch { return {}; }
+}
+
+function setSwaps(swaps) {
+  localStorage.setItem(STORAGE_KEY_SWAPS, JSON.stringify(swaps));
+}
+
+function getSwapForDate(dateStr) {
+  return getSwaps()[dateStr] || null;
+}
+
+function getReminderTime() {
+  return localStorage.getItem(STORAGE_KEY_REMINDER) || '08:00';
+}
+
+// ==================== 核心计算 ====================
+
+/** 计算某个日期的原始班次（不考虑调班） */
+function getOriginalShift(date) {
+  const anchor = getAnchorDate();
+  const diffDays = Math.floor((date.getTime() - anchor.getTime()) / (1000 * 60 * 60 * 24));
+  // 处理负值（早于起始日期的情况）
+  const idx = ((diffDays % 6) + 6) % 6;
+  return SHIFT_TYPES[idx];
+}
+
+/** 计算某个日期的实际班次（考虑调班） */
+function getActualShift(date) {
+  const dateStr = formatDate(date);
+  const swap = getSwapForDate(dateStr);
+  if (swap) return swap.newShift;
+  return getOriginalShift(date);
+}
+
+/** 检查某个日期是否被调班 */
+function isSwapped(date) {
+  return !!getSwapForDate(formatDate(date));
+}
+
+/** 获取调班备注 */
+function getSwapNote(date) {
+  const swap = getSwapForDate(formatDate(date));
+  return swap ? swap.note : '';
+}
+
+// ==================== 日期工具 ====================
+
+function formatDate(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function today() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
+function isSameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() &&
+         a.getMonth() === b.getMonth() &&
+         a.getDate() === b.getDate();
+}
+
+const WEEKDAY_NAMES = ['日', '一', '二', '三', '四', '五', '六'];
+
+// ==================== 渲染 ====================
+
+/** 渲染今日卡片 */
+function renderToday() {
+  const t = today();
+  const shift = getActualShift(t);
+  const swapped = isSwapped(t);
+  const card = document.getElementById('todayCard');
+  const dateLabel = document.getElementById('todayDateLabel');
+  const icon = document.getElementById('todayIcon');
+  const name = document.getElementById('todayShift');
+  const detail = document.getElementById('todayDetail');
+  const badge = document.getElementById('todaySwappedBadge');
+
+  card.className = 'today-card shift-' + SHIFT_CSS_CLASS[shift];
+  dateLabel.textContent = formatDate(t) + ' 星期' + WEEKDAY_NAMES[t.getDay()];
+  icon.textContent = SHIFT_ICONS[shift];
+  name.textContent = shift;
+  detail.textContent = SHIFT_DETAILS[shift];
+  badge.style.display = swapped ? 'inline-block' : 'none';
+}
+
+/** 渲染未来7天 */
+function renderUpcoming() {
+  const strip = document.getElementById('upcomingStrip');
+  strip.innerHTML = '';
+  const t = today();
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(t);
+    d.setDate(d.getDate() + i);
+    const shift = getActualShift(d);
+    const div = document.createElement('div');
+    div.className = 'upcoming-item';
+    div.innerHTML = `
+      <div class="day-name">${i === 0 ? '今天' : '周' + WEEKDAY_NAMES[d.getDay()]}</div>
+      <div class="day-date">${d.getMonth() + 1}/${d.getDate()}</div>
+      <span class="dot dot-${SHIFT_CSS_CLASS[shift]}"></span>
+      <div style="font-size:0.75em;margin-top:2px;color:var(--text-secondary)">${shift}</div>
+    `;
+    strip.appendChild(div);
+  }
+}
+
+/** 渲染日历 */
+function renderCalendar() {
+  const grid = document.getElementById('calendarGrid');
+  const label = document.getElementById('monthLabel');
+  const t = today();
+
+  label.textContent = `${currentYear}年 ${currentMonth + 1}月`;
+
+  // 星期头
+  const headers = ['日', '一', '二', '三', '四', '五', '六'];
+  let html = headers.map(h => `<div class="day-header">${h}</div>`).join('');
+
+  // 当月第一天和最后一天
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const lastDay = new Date(currentYear, currentMonth + 1, 0);
+  const startDayOfWeek = firstDay.getDay(); // 0=Sun
+
+  // 填充上月尾巴
+  const prevLastDay = new Date(currentYear, currentMonth, 0);
+  for (let i = startDayOfWeek - 1; i >= 0; i--) {
+    const d = new Date(currentYear, currentMonth - 1, prevLastDay.getDate() - i);
+    const shift = getActualShift(d);
+    html += `<div class="day-cell other-month cell-${SHIFT_CSS_CLASS[shift]}" title="${formatDate(d)}">
+      <span class="cell-num">${d.getDate()}</span>
+      <span class="cell-label">${shift}</span>
+    </div>`;
+  }
+
+  // 当月日期
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const d = new Date(currentYear, currentMonth, day);
+    const shift = getActualShift(d);
+    const swapped = isSwapped(d);
+    let cls = `day-cell cell-${SHIFT_CSS_CLASS[shift]}`;
+    if (isSameDay(d, t)) cls += ' today';
+    if (swapped) cls += ' swapped';
+    html += `<div class="${cls}"
+                  data-date="${formatDate(d)}"
+                  title="${formatDate(d)} ${shift}${swapped ? ' (已调班)' : ''}"
+                  onclick="openDayModal('${formatDate(d)}')">
+      <span class="cell-num">${day}</span>
+      <span class="cell-label">${shift}</span>
+    </div>`;
+  }
+
+  // 填充下月头
+  const totalCells = startDayOfWeek + lastDay.getDate();
+  const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+  for (let i = 1; i <= remaining; i++) {
+    const d = new Date(currentYear, currentMonth + 1, i);
+    const shift = getActualShift(d);
+    html += `<div class="day-cell other-month cell-${SHIFT_CSS_CLASS[shift]}" title="${formatDate(d)}">
+      <span class="cell-num">${i}</span>
+      <span class="cell-label">${shift}</span>
+    </div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+/** 渲染调班记录表 */
+function renderSwapLog() {
+  const tbody = document.getElementById('swapTableBody');
+  const swaps = getSwaps();
+  const entries = Object.entries(swaps).sort((a, b) => b[0].localeCompare(a[0])); // 最新在前
+
+  if (entries.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">暂无调班记录 📝<br><small>点击日历上的日期即可调班</small></td></tr>';
+    document.getElementById('swapLogCard').style.display = 'block';
+    return;
+  }
+
+  // 只显示未来的调班 + 最近30天的调班
+  const cutoff = new Date(today());
+  cutoff.setDate(cutoff.getDate() - 30);
+  const recentEntries = entries.filter(([dateStr]) => new Date(dateStr + 'T00:00:00') >= cutoff);
+
+  if (recentEntries.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">暂无近期调班记录 📝</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = recentEntries.map(([dateStr, swap]) => {
+    const originalShift = getOriginalShift(new Date(dateStr + 'T00:00:00'));
+    return `
+      <tr>
+        <td>${dateStr}</td>
+        <td><span class="badge badge-${SHIFT_CSS_CLASS[originalShift]}">${originalShift}</span></td>
+        <td><span class="badge badge-${SHIFT_CSS_CLASS[swap.newShift]}">${swap.newShift}</span></td>
+        <td>${swap.note || '—'}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" onclick="deleteSwap('${dateStr}')">删除</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+/** 完整渲染 */
+function renderAll() {
+  renderToday();
+  renderUpcoming();
+  renderCalendar();
+  renderSwapLog();
+}
+
+// ==================== 日历导航 ====================
+
+function navMonth(delta) {
+  currentMonth += delta;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderAll();
+}
+
+function goToday() {
+  const t = today();
+  currentMonth = t.getMonth();
+  currentYear = t.getFullYear();
+  renderAll();
+}
+
+// ==================== 日期详情弹窗（调班） ====================
+
+function openDayModal(dateStr) {
+  selectedDayDate = dateStr;
+  const d = new Date(dateStr + 'T00:00:00');
+  const originalShift = getOriginalShift(d);
+  const actualShift = getActualShift(d);
+  const swapped = isSwapped(d);
+  const swapNote = getSwapNote(d);
+
+  document.getElementById('dayModalTitle').textContent = '📅 ' + dateStr + ' 星期' + WEEKDAY_NAMES[d.getDay()];
+  document.getElementById('dayModalDate').value = dateStr;
+  document.getElementById('dayModalCurrentShift').value = actualShift + (swapped ? ' (已调班，原为: ' + originalShift + ')' : '');
+  document.getElementById('dayModalNewShift').value = '';
+  document.getElementById('dayModalNote').value = '';
+
+  const noteGroup = document.getElementById('dayModalSwapNoteGroup');
+  const noteInput = document.getElementById('dayModalCurrentNote');
+  const resetBtn = document.getElementById('dayModalResetBtn');
+
+  if (swapped) {
+    noteGroup.style.display = 'block';
+    noteInput.value = swapNote;
+    resetBtn.style.display = 'inline-flex';
+  } else {
+    noteGroup.style.display = 'none';
+    noteInput.value = '';
+    resetBtn.style.display = 'none';
+  }
+
+  document.getElementById('dayModal').classList.add('active');
+}
+
+function closeDayModal() {
+  document.getElementById('dayModal').classList.remove('active');
+  selectedDayDate = null;
+}
+
+function saveSwap() {
+  if (!selectedDayDate) return;
+  const newShift = document.getElementById('dayModalNewShift').value;
+  const note = document.getElementById('dayModalNote').value.trim();
+  const d = new Date(selectedDayDate + 'T00:00:00');
+  const originalShift = getOriginalShift(d);
+
+  const swaps = getSwaps();
+
+  if (!newShift) {
+    // 不调整，如果之前有调班记录就保留
+    showToast('未做更改');
+    closeDayModal();
+    return;
+  }
+
+  if (newShift === originalShift) {
+    // 恢复原班次，删除调班记录
+    delete swaps[selectedDayDate];
+    setSwaps(swaps);
+    showToast('✅ 已恢复为原班次: ' + originalShift);
+  } else {
+    // 记录调班
+    swaps[selectedDayDate] = { newShift, note };
+    setSwaps(swaps);
+    showToast('✅ 已调班: ' + originalShift + ' → ' + newShift);
+  }
+
+  closeDayModal();
+  renderAll();
+}
+
+function resetSwap() {
+  if (!selectedDayDate) return;
+  const swaps = getSwaps();
+  const d = new Date(selectedDayDate + 'T00:00:00');
+  const originalShift = getOriginalShift(d);
+  delete swaps[selectedDayDate];
+  setSwaps(swaps);
+  showToast('↩ 已恢复为原班次: ' + originalShift);
+  closeDayModal();
+  renderAll();
+}
+
+function deleteSwap(dateStr) {
+  if (!confirm('确定要删除 ' + dateStr + ' 的调班记录吗？将恢复为原班次。')) return;
+  const swaps = getSwaps();
+  delete swaps[dateStr];
+  setSwaps(swaps);
+  showToast('🗑 已删除调班记录');
+  renderAll();
+}
+
+// ==================== 设置弹窗 ====================
+
+function openSettings() {
+  document.getElementById('settingsAnchorDate').value = formatDate(getAnchorDate());
+  document.getElementById('settingsReminderTime').value = getReminderTime();
+  document.getElementById('settingsModal').classList.add('active');
+}
+
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('active');
+}
+
+function saveSettings() {
+  const anchorStr = document.getElementById('settingsAnchorDate').value;
+  const reminderTime = document.getElementById('settingsReminderTime').value;
+
+  if (!anchorStr) {
+    showToast('⚠️ 请选择起始日期');
+    return;
+  }
+
+  setAnchorDate(anchorStr);
+  localStorage.setItem(STORAGE_KEY_REMINDER, reminderTime);
+  showToast('✅ 设置已保存！');
+  closeSettings();
+  renderAll();
+
+  // 重新调度提醒
+  scheduleReminder();
+}
+
+// ==================== 通知提醒 ====================
+
+let reminderTimer = null;
+
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function scheduleReminder() {
+  if (reminderTimer) clearTimeout(reminderTimer);
+
+  const timeStr = getReminderTime();
+  const [h, m] = timeStr.split(':').map(Number);
+  const now = new Date();
+  const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
+
+  if (target <= now) {
+    target.setDate(target.getDate() + 1); // 如果今天的时间已过，明天再提醒
+  }
+
+  const delay = target.getTime() - now.getTime();
+  reminderTimer = setTimeout(() => {
+    sendNotification();
+    scheduleReminder(); // 每天一次
+  }, delay);
+}
+
+function sendNotification() {
+  const t = today();
+  const shift = getActualShift(t);
+
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('🏥 今日班次提醒', {
+      body: `今天是 ${formatDate(t)}，班次：${shift}\n${SHIFT_DETAILS[shift]}`,
+      icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🏥</text></svg>',
+      tag: 'daily-shift-reminder',
+    });
+  }
+}
+
+// ==================== 导出 ICS 日历文件 ====================
+
+function exportICS() {
+  const anchor = getAnchorDate();
+  // 生成未来90天的日历事件
+  const endDate = new Date(today());
+  endDate.setDate(endDate.getDate() + 90);
+
+  let icsContent = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Hospital Schedule//CN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:医院排班',
+  ];
+
+  const d = new Date(anchor);
+  while (d <= endDate) {
+    const shift = getActualShift(d);
+    const dateStr = formatDate(d).replace(/-/g, '');
+    const swapped = isSwapped(d);
+
+    // 事件摘要
+    let summary = shift;
+    if (swapped) summary = '🔄 ' + shift + '(调班)';
+
+    // 全天事件
+    icsContent.push('BEGIN:VEVENT');
+    icsContent.push('DTSTART;VALUE=DATE:' + dateStr);
+    // ICS 的 DTEND 对于全天事件应该是次日
+    const nextDay = new Date(d);
+    nextDay.setDate(nextDay.getDate() + 1);
+    const nextDateStr = formatDate(nextDay).replace(/-/g, '');
+    icsContent.push('DTEND;VALUE=DATE:' + nextDateStr);
+    icsContent.push('SUMMARY:' + summary);
+    if (shift === '上午+夜班') {
+      icsContent.push('DESCRIPTION:上午半天班 + 18:00至次日8:00夜班');
+    }
+    icsContent.push('END:VEVENT');
+
+    d.setDate(d.getDate() + 1);
+  }
+
+  icsContent.push('END:VCALENDAR');
+
+  // 下载文件
+  const blob = new Blob([icsContent.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '医院排班_' + formatDate(today()) + '.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast('📱 日历文件已下载！可导入手机/电脑日历');
+}
+
+// ==================== Toast ====================
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ==================== 键盘快捷键 ====================
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeDayModal();
+    closeSettings();
+  }
+  if (e.ctrlKey || e.metaKey) {
+    if (e.key === 'ArrowLeft') navMonth(-1);
+    if (e.key === 'ArrowRight') navMonth(1);
+    if (e.key === 't') { e.preventDefault(); goToday(); }
+  }
+});
+
+// ==================== 点击弹窗遮罩关闭 ====================
+
+document.getElementById('dayModal').addEventListener('click', function(e) {
+  if (e.target === this) closeDayModal();
+});
+document.getElementById('settingsModal').addEventListener('click', function(e) {
+  if (e.target === this) closeSettings();
+});
+
+// ==================== 初始化 ====================
+
+function init() {
+  const t = today();
+  currentMonth = t.getMonth();
+  currentYear = t.getFullYear();
+
+  renderAll();
+  requestNotificationPermission();
+  scheduleReminder();
+}
+
+init();
+
+// 注册 Service Worker (PWA)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js')
+    .then(reg => console.log('✅ SW 已注册', reg.scope))
+    .catch(err => console.log('⚠️ SW 注册失败', err));
+}
+</script>
+
+</body>
+</html>
