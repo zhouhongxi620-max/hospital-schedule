@@ -1,5 +1,5 @@
 // Service Worker - 医院排班助手
-const CACHE_NAME = 'hospital-schedule-v2';
+const CACHE_NAME = 'hospital-schedule-v3';
 const FILES_TO_CACHE = [
   './index.html',
   './manifest.json',
