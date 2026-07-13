@@ -427,7 +427,7 @@ const STORAGE_SWAPS = 'schedule_swaps_v2';
 const STORAGE_REMINDER = 'schedule_reminder_time';
 const STORAGE_SELECTED = 'schedule_selected_member';
 
-const DEFAULT_ANCHOR = '2026-07-06';
+const DEFAULT_ANCHOR = '2026-07-13';
 const WEEKDAYS = ['日','一','二','三','四','五','六'];
 
 let currentMonth, currentYear, selectedDayDate, selectedDayMember;
@@ -436,8 +436,9 @@ let selfMemberId = 'self';
 // ==================== 数据管理 ====================
 
 function getDefaultMembers() {
-  // 默认6人，起始日期错开1天
-  const names = ['我','同事B','同事C','同事D','同事E','同事F'];
+  // 6人排班，起始日期各错开1天
+  // 顺序：7/13陈晓丽→7/14唐强→7/15侯丽芳→7/16高爽→7/17林文文→7/18何行彪
+  const names = ['陈晓丽','唐强','侯丽芳','高爽','林文文','何行彪'];
   const anchor = new Date(DEFAULT_ANCHOR + 'T00:00:00');
   return names.map((name, i) => {
     const d = new Date(anchor);
@@ -876,7 +877,7 @@ function removeMemberRow(btn, memberId) {
 
 function autoFillStaggered() {
   // 自动填充6人
-  const names = ['我','同事B','同事C','同事D','同事E','同事F'];
+  const names = ['陈晓丽','唐强','侯丽芳','高爽','林文文','何行彪'];
   const nameInputs = document.querySelectorAll('.mem-name-input');
   const anchorInputs = document.querySelectorAll('.mem-anchor-input');
   const myAnchorStr = document.getElementById('settingsMyAnchor').value || DEFAULT_ANCHOR;
