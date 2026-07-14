@@ -15,8 +15,10 @@
 :root{
   --门诊:#43A047;--门诊-bg:#E8F5E9;--门诊-tag:#C8E6C9;
   --住院:#1E88E5;--住院-bg:#E3F2FD;--住院-tag:#BBDEFB;
-  --夜班:#FB8C00;--夜班-bg:#FFF3E0;--夜班-tag:#FFE0B2;
+  --上午:#FB8C00;--上午-bg:#FFF3E0;--上午-tag:#FFE0B2;
+  --夜班:#7B1FA2;--夜班-bg:#F3E5F5;--夜班-tag:#E1BEE7;
   --休息:#78909C;--休息-bg:#ECEFF1;--休息-tag:#CFD8DC;
+  --武侯:#00897B;--武侯-bg:#E0F2F1;--武侯-tag:#B2DFDB;
   --today-gold:#FFD600;--swap-pink:#E91E63;
   --bg:#f0f2f5;--card:#fff;--text:#263238;--text2:#607D8B;
   --shadow:0 2px 12px rgba(0,0,0,.08);--radius:12px
@@ -33,8 +35,7 @@ body{
 .header-actions{display:flex;gap:8px}
 .btn{
   padding:7px 14px;border:none;border-radius:8px;cursor:pointer;font-size:.85em;
-  font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:5px;
-  white-space:nowrap
+  font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap
 }
 .btn:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .btn-primary{background:#5C6BC0;color:#fff}
@@ -42,7 +43,6 @@ body{
 .btn-sm{padding:5px 10px;font-size:.8em}
 .btn-danger{background:#EF5350;color:#fff}
 .btn-xs{padding:3px 8px;font-size:.75em;border-radius:6px}
-
 .container{max-width:960px;margin:0 auto;padding:16px}
 
 /* ===== 今日团队卡片 ===== */
@@ -52,7 +52,7 @@ body{
 }
 .team-today-card h3{font-size:.95em;color:var(--text2);margin-bottom:12px}
 .team-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px
 }
 .team-member-card{
   padding:12px;border-radius:10px;text-align:center;border:2px solid transparent;
@@ -61,35 +61,42 @@ body{
 .team-member-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
 .team-member-card.self-card{border-color:var(--today-gold);box-shadow:0 0 0 3px rgba(255,214,0,.2)}
 .team-member-card .mem-name{font-weight:600;font-size:.85em;margin-bottom:4px}
-.team-member-card .mem-shift{font-size:.9em;font-weight:700}
-.team-member-card .mem-desc{font-size:.72em;color:var(--text2);margin-top:2px}
+.team-member-card .mem-shift{font-size:.82em;font-weight:700;margin:3px 0}
+.team-member-card .mem-time{font-size:.7em;color:var(--text2)}
 .team-member-card .mem-badge{
   position:absolute;top:-6px;right:-6px;background:var(--today-gold);
   color:#333;font-size:.65em;padding:2px 6px;border-radius:8px;font-weight:700
 }
+.team-member-card .mem-swapped{font-size:.65em;color:var(--swap-pink);margin-top:1px}
 .card-门诊{background:var(--门诊-bg);color:var(--门诊)}
 .card-住院{background:var(--住院-bg);color:var(--住院)}
+.card-上午{background:var(--上午-bg);color:var(--上午)}
 .card-夜班{background:var(--夜班-bg);color:var(--夜班)}
 .card-休息{background:var(--休息-bg);color:var(--休息)}
+.card-武侯{background:var(--武侯-bg);color:var(--武侯)}
 
-/* ===== 团队周视图表格 ===== */
+/* ===== 周视图表格 ===== */
 .week-table-card{
   background:var(--card);border-radius:var(--radius);padding:16px 20px;
   margin-bottom:16px;box-shadow:var(--shadow);overflow-x:auto
 }
 .week-table-card h3{font-size:.95em;color:var(--text2);margin-bottom:12px}
-.week-table{width:100%;border-collapse:collapse;font-size:.82em;min-width:600px}
-.week-table th,.week-table td{padding:8px 6px;text-align:center;border:1px solid #eee}
+.week-table{width:100%;border-collapse:collapse;font-size:.78em;min-width:700px}
+.week-table th,.week-table td{padding:6px 4px;text-align:center;border:1px solid #eee;vertical-align:middle}
 .week-table th{background:#f9f9f9;font-weight:600;white-space:nowrap}
-.week-table .col-date{font-size:.72em;color:var(--text2)}
+.week-table .col-date{font-size:.75em;color:var(--text2)}
 .week-table .col-today{background:#fffde7!important;font-weight:700}
 .week-table .cell-门诊{background:var(--门诊-bg);color:var(--门诊);font-weight:600}
 .week-table .cell-住院{background:var(--住院-bg);color:var(--住院);font-weight:600}
+.week-table .cell-上午{background:var(--上午-bg);color:var(--上午);font-weight:600}
 .week-table .cell-夜班{background:var(--夜班-bg);color:var(--夜班);font-weight:600}
 .week-table .cell-休息{background:var(--休息-bg);color:var(--休息)}
+.week-table .cell-武侯{background:var(--武侯-bg);color:var(--武侯);font-weight:600}
 .week-table .cell-swapped{border:2px dashed var(--swap-pink)!important}
 .week-table .mem-col{text-align:left;font-weight:600;white-space:nowrap;background:#fafafa}
 .week-table .mem-col.self-row{background:#fffde7}
+.week-table .slot-line{display:block;padding:2px 0;font-size:.9em}
+.week-table .slot-line+.slot-line{border-top:1px dotted rgba(0,0,0,.1);margin-top:1px;padding-top:3px}
 
 /* ===== 日历 ===== */
 .calendar-card{
@@ -107,33 +114,36 @@ body{
 }
 .calendar-nav button:hover{background:#f5f5f5}
 .calendar-nav .btn-today{width:auto;padding:0 10px;font-size:.8em}
-
 .member-selector{
   padding:6px 10px;border:1.5px solid #ddd;border-radius:8px;font-size:.85em;
   background:#fff;cursor:pointer;font-family:inherit
 }
 .member-selector:focus{outline:none;border-color:#5C6BC0}
-
 .calendar-grid{
   display:grid;grid-template-columns:repeat(7,1fr);gap:3px
 }
 .calendar-grid .day-header{text-align:center;font-size:.78em;font-weight:600;color:var(--text2);padding:6px 0}
 .calendar-grid .day-cell{
-  aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  border-radius:8px;cursor:pointer;font-size:.82em;font-weight:500;position:relative;
-  border:2px solid transparent;transition:all .15s;min-width:0;user-select:none
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border-radius:8px;cursor:pointer;font-weight:500;position:relative;
+  border:2px solid transparent;transition:all .15s;min-width:0;user-select:none;
+  padding:4px 2px;font-size:.75em
 }
 .calendar-grid .day-cell:hover{transform:scale(1.06);box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:2}
 .calendar-grid .day-cell.other-month{opacity:.3;cursor:default}
 .calendar-grid .day-cell.other-month:hover{transform:none;box-shadow:none}
 .calendar-grid .day-cell.today{border-color:var(--today-gold)!important;box-shadow:0 0 0 3px rgba(255,214,0,.25)}
 .calendar-grid .day-cell.swapped{border-style:dashed;border-color:var(--swap-pink)!important}
-.calendar-grid .day-cell .cell-num{font-size:.9em;font-weight:600}
-.calendar-grid .day-cell .cell-label{font-size:.55em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.calendar-grid .day-cell .cell-num{font-size:.85em;font-weight:600;margin-bottom:1px}
+.calendar-grid .day-cell .cell-shift{font-size:.55em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.2}
 .calendar-grid .day-cell.cell-门诊{background:var(--门诊-bg);color:var(--门诊)}
 .calendar-grid .day-cell.cell-住院{background:var(--住院-bg);color:var(--住院)}
+.calendar-grid .day-cell.cell-上午{background:var(--上午-bg);color:var(--上午)}
 .calendar-grid .day-cell.cell-夜班{background:var(--夜班-bg);color:var(--夜班)}
 .calendar-grid .day-cell.cell-休息{background:var(--休息-bg);color:var(--休息)}
+.calendar-grid .day-cell.cell-武侯{background:var(--武侯-bg);color:var(--武侯)}
+/* 多段日：迷你分段 */
+.calendar-grid .day-cell.multi-slot .cell-shift{font-size:.5em}
 
 /* ===== 图例 ===== */
 .legend{
@@ -143,28 +153,30 @@ body{
 .legend-dot{width:13px;height:13px;border-radius:3px}
 .lg-门诊{background:var(--门诊-bg);border:2px solid var(--门诊)}
 .lg-住院{background:var(--住院-bg);border:2px solid var(--住院)}
+.lg-上午{background:var(--上午-bg);border:2px solid var(--上午)}
 .lg-夜班{background:var(--夜班-bg);border:2px solid var(--夜班)}
 .lg-休息{background:var(--休息-bg);border:2px solid var(--休息)}
+.lg-武侯{background:var(--武侯-bg);border:2px solid var(--武侯)}
 .lg-调班{background:#fff;border:2px dashed var(--swap-pink)}
 
-/* ===== 成员详情卡片 ===== */
+/* ===== 详情卡片 ===== */
 .detail-card{
   background:var(--card);border-radius:var(--radius);padding:20px;margin-bottom:16px;
   box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden
 }
-.detail-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
-.detail-card.shift-门诊::before{background:var(--门诊)}
-.detail-card.shift-住院::before{background:var(--住院)}
-.detail-card.shift-夜班::before{background:var(--夜班)}
-.detail-card.shift-休息::before{background:var(--休息)}
-.detail-card .detail-icon{font-size:2.5em;margin-bottom:4px}
-.detail-card .detail-shift{font-size:1.5em;font-weight:700}
+.detail-card .detail-icon{font-size:2em;margin-bottom:4px}
+.detail-card .detail-shift{font-size:1.3em;font-weight:700}
 .detail-card .detail-date{font-size:.85em;color:var(--text2);margin-top:2px}
 .detail-card .detail-desc{font-size:.88em;color:var(--text2);margin-top:4px}
-.detail-card.shift-门诊 .detail-icon,.detail-card.shift-门诊 .detail-shift{color:var(--门诊)}
-.detail-card.shift-住院 .detail-icon,.detail-card.shift-住院 .detail-shift{color:var(--住院)}
-.detail-card.shift-夜班 .detail-icon,.detail-card.shift-夜班 .detail-shift{color:var(--夜班)}
-.detail-card.shift-休息 .detail-icon,.detail-card.shift-休息 .detail-shift{color:var(--休息)}
+.detail-card .detail-slot{display:inline-block;margin:4px 8px;padding:8px 14px;border-radius:8px;text-align:center}
+.detail-card .detail-slot .slot-name{font-weight:700;font-size:.9em}
+.detail-card .detail-slot .slot-time{font-size:.75em;color:var(--text2)}
+.dslot-门诊{background:var(--门诊-bg);color:var(--门诊)}
+.dslot-住院{background:var(--住院-bg);color:var(--住院)}
+.dslot-上午{background:var(--上午-bg);color:var(--上午)}
+.dslot-夜班{background:var(--夜班-bg);color:var(--夜班)}
+.dslot-休息{background:var(--休息-bg);color:var(--休息)}
+.dslot-武侯{background:var(--武侯-bg);color:var(--武侯)}
 
 /* ===== 调班记录 ===== */
 .swap-log-card{
@@ -179,8 +191,10 @@ body{
 .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.78em;font-weight:500}
 .badge-门诊{background:var(--门诊-bg);color:var(--门诊)}
 .badge-住院{background:var(--住院-bg);color:var(--住院)}
+.badge-上午{background:var(--上午-bg);color:var(--上午)}
 .badge-夜班{background:var(--夜班-bg);color:var(--夜班)}
 .badge-休息{background:var(--休息-bg);color:var(--休息)}
+.badge-武侯{background:var(--武侯-bg);color:var(--武侯)}
 
 /* ===== 弹窗 ===== */
 .modal-overlay{
@@ -190,10 +204,10 @@ body{
 .modal-overlay.active{display:flex}
 .modal{
   background:var(--card);border-radius:var(--radius);padding:24px 28px;
-  max-width:480px;width:92%;max-height:85vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.2)
+  max-width:500px;width:92%;max-height:85vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.2)
 }
-.modal h3{margin-bottom:16px;font-size:1.1em}
-.modal .form-group{margin-bottom:14px}
+.modal h3{margin-bottom:14px;font-size:1.1em}
+.modal .form-group{margin-bottom:12px}
 .modal label{display:block;font-size:.84em;font-weight:600;margin-bottom:5px;color:var(--text2)}
 .modal input[type="text"],.modal input[type="date"],.modal input[type="time"],
 .modal select,.modal textarea{
@@ -202,16 +216,29 @@ body{
 }
 .modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:#5C6BC0}
 .modal textarea{resize:vertical;min-height:56px}
-.modal .btn-row{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.modal .btn-row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
 .modal hr{border:none;border-top:1px solid #eee;margin:14px 0}
+.modal .slot-card{
+  padding:10px 14px;border-radius:8px;margin-bottom:10px;border:1.5px solid transparent;
+  position:relative
+}
+.modal .slot-card .slot-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px}
+.modal .slot-card .slot-title{font-weight:700;font-size:.88em}
+.modal .slot-card .slot-time{font-size:.78em;color:var(--text2)}
+.modal .slot-card .slot-current{font-size:.82em;margin-bottom:4px}
+.modal .slot-card.swapped-slot{border-color:var(--swap-pink);border-style:dashed}
+.slot-card-门诊{background:var(--门诊-bg)}
+.slot-card-住院{background:var(--住院-bg)}
+.slot-card-上午{background:var(--上午-bg)}
+.slot-card-夜班{background:var(--夜班-bg)}
+.slot-card-休息{background:var(--休息-bg)}
+.slot-card-武侯{background:var(--武侯-bg)}
 .tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:2px solid #eee}
 .tab-btn{padding:8px 16px;border:none;background:none;cursor:pointer;font-size:.88em;font-weight:500;
   color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
 .tab-btn.active{color:#5C6BC0;border-bottom-color:#5C6BC0}
 .tab-content{display:none}
 .tab-content.active{display:block}
-
-/* ===== 成员编辑行 ===== */
 .member-edit-row{
   display:flex;align-items:center;gap:8px;padding:8px 10px;
   background:#fafafa;border-radius:8px;margin-bottom:8px;flex-wrap:wrap
@@ -220,7 +247,6 @@ body{
 .member-edit-row input[type="date"]{flex:1.2;min-width:110px}
 .member-edit-row .mem-index{font-weight:700;font-size:.82em;color:var(--text2);min-width:18px}
 
-/* ===== Toast ===== */
 .toast{
   position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
   background:#333;color:#fff;padding:10px 22px;border-radius:20px;
@@ -228,30 +254,23 @@ body{
 }
 .toast.show{opacity:1}
 
-/* ===== 响应式 ===== */
 @media(max-width:600px){
   .container{padding:10px}
   .team-grid{grid-template-columns:repeat(3,1fr);gap:6px}
   .team-member-card{padding:10px 6px}
   .team-member-card .mem-name{font-size:.75em}
-  .team-member-card .mem-shift{font-size:.78em}
+  .team-member-card .mem-shift{font-size:.72em}
   .calendar-card{padding:10px}
   .calendar-grid{gap:2px}
-  .calendar-grid .day-cell{font-size:.72em;border-radius:5px}
-  .calendar-grid .day-cell .cell-label{font-size:.5em}
+  .calendar-grid .day-cell{font-size:.7em;border-radius:5px;padding:2px 1px}
+  .calendar-grid .day-cell .cell-shift{font-size:.48em}
   .modal{padding:16px}
   .member-edit-row{gap:4px}
-}
-@media print{
-  .header,.btn,.swap-log-card,.modal-overlay,.toast{display:none!important}
-  .container{max-width:100%;padding:0}
-  .calendar-card{box-shadow:none;break-inside:avoid}
 }
 </style>
 </head>
 <body>
 
-<!-- 顶部 -->
 <header class="header">
   <h1>🏥 排班助手 · 团队版</h1>
   <div class="header-actions">
@@ -270,12 +289,10 @@ body{
 
 <!-- 选中成员详情 -->
 <div class="detail-card" id="detailCard">
-  <div class="detail-icon" id="detailIcon"></div>
-  <div class="detail-shift" id="detailShift"></div>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px" id="detailSlots"></div>
   <div class="detail-date" id="detailDate"></div>
-  <div class="detail-desc" id="detailDesc"></div>
   <div style="margin-top:8px">
-    <button class="btn btn-outline btn-xs" onclick="selectMember(selfMemberId)" id="detailSelfBtn">👤 查看我的</button>
+    <button class="btn btn-outline btn-xs" onclick="selectMember(selfMemberId)">👤 查看我的</button>
   </div>
 </div>
 
@@ -291,8 +308,7 @@ body{
 <div class="calendar-card">
   <div class="calendar-header">
     <span class="month-label" id="monthLabel"></span>
-    <select class="member-selector" id="calendarMember" onchange="renderCalendar()">
-    </select>
+    <select class="member-selector" id="calendarMember" onchange="renderCalendar()"></select>
     <div class="calendar-nav">
       <button onclick="navMonth(-1)">◀</button>
       <button class="btn-today" onclick="goToday()">今天</button>
@@ -304,10 +320,12 @@ body{
 
 <!-- 图例 -->
 <div class="legend">
-  <span class="legend-item"><span class="legend-dot lg-门诊"></span>门诊药房</span>
-  <span class="legend-item"><span class="legend-dot lg-住院"></span>住院药房</span>
-  <span class="legend-item"><span class="legend-dot lg-夜班"></span>上午+夜班</span>
+  <span class="legend-item"><span class="legend-dot lg-门诊"></span>门诊 9:00</span>
+  <span class="legend-item"><span class="legend-dot lg-住院"></span>住院 9:00</span>
+  <span class="legend-item"><span class="legend-dot lg-上午"></span>上午 8-12</span>
+  <span class="legend-item"><span class="legend-dot lg-夜班"></span>夜班 18-8</span>
   <span class="legend-item"><span class="legend-dot lg-休息"></span>休息</span>
+  <span class="legend-item"><span class="legend-dot lg-武侯"></span>武侯院区</span>
   <span class="legend-item"><span class="legend-dot lg-调班"></span>已调班</span>
 </div>
 
@@ -316,7 +334,7 @@ body{
   <h3>🔄 调班记录</h3>
   <div style="overflow-x:auto">
     <table class="swap-table">
-      <thead><tr><th>成员</th><th>日期</th><th>原班次</th><th>调为</th><th>备注</th><th>操作</th></tr></thead>
+      <thead><tr><th>成员</th><th>日期</th><th>段次</th><th>原班次</th><th>调为</th><th>备注</th><th>操作</th></tr></thead>
       <tbody id="swapTableBody"></tbody>
     </table>
   </div>
@@ -324,46 +342,24 @@ body{
 
 </div>
 
-<!-- 日期详情弹窗（调班） -->
+<!-- 日期详情弹窗 -->
 <div class="modal-overlay" id="dayModal">
   <div class="modal">
     <h3 id="dayModalTitle">📅 日期详情</h3>
     <div class="form-group">
       <label>成员</label>
-      <select id="dayModalMember" onchange="onSwapMemberChange()">
-      </select>
+      <select id="dayModalMember" onchange="onSwapMemberChange()"></select>
     </div>
     <div class="form-group">
       <label>日期</label>
       <input type="text" id="dayModalDate" readonly style="background:#f5f5f5">
     </div>
-    <div class="form-group">
-      <label>当前班次</label>
-      <input type="text" id="dayModalCurrentShift" readonly style="background:#f5f5f5">
-    </div>
-    <div class="form-group" id="dayModalSwapNoteGroup" style="display:none">
-      <label>调班备注</label>
-      <input type="text" id="dayModalCurrentNote" readonly style="background:#f5f5f5">
-    </div>
-    <hr>
-    <div class="form-group">
-      <label>调班操作 — 改为以下班次</label>
-      <select id="dayModalNewShift">
-        <option value="">— 不调整 —</option>
-        <option value="门诊药房">🏥 门诊药房</option>
-        <option value="住院药房">🏨 住院药房</option>
-        <option value="上午+夜班">🌙 上午+夜班</option>
-        <option value="休息">🏠 休息</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>调班备注（选填）</label>
-      <textarea id="dayModalNote" placeholder="例如：与张三调班"></textarea>
-    </div>
+    <p style="font-size:.82em;color:var(--text2);margin-bottom:8px">
+      该日期包含 <b id="dayModalSlotCount">1</b> 个班次段，可分别调班：
+    </p>
+    <div id="dayModalSlots"></div>
     <div class="btn-row">
-      <button class="btn btn-danger btn-sm" id="dayModalResetBtn" style="display:none" onclick="resetSwap()">↩ 恢复</button>
-      <button class="btn btn-outline btn-sm" onclick="closeDayModal()">取消</button>
-      <button class="btn btn-primary btn-sm" onclick="saveSwap()">💾 保存</button>
+      <button class="btn btn-outline btn-sm" onclick="closeDayModal()">关闭</button>
     </div>
   </div>
 </div>
@@ -376,8 +372,6 @@ body{
       <button class="tab-btn active" id="tabBtnMy" onclick="switchTab('my')">👤 我的设置</button>
       <button class="tab-btn" id="tabBtnTeam" onclick="switchTab('team')">👥 团队管理</button>
     </div>
-
-    <!-- 我的设置 -->
     <div class="tab-content active" id="tab-my">
       <div class="form-group">
         <label>我的轮班起始日期（第1天=门诊药房）</label>
@@ -392,11 +386,9 @@ body{
         <button class="btn btn-primary btn-sm" onclick="saveMySettings()">💾 保存</button>
       </div>
     </div>
-
-    <!-- 团队管理 -->
     <div class="tab-content" id="tab-team">
       <p style="font-size:.82em;color:var(--text2);margin-bottom:12px">
-        管理参与排班的成员。每个人的起始日期通常是错开1天的。
+        管理参与排班的成员。起始日期为每个人的第1天（门诊药房）。
       </p>
       <div id="teamMemberEditList"></div>
       <div class="btn-row" style="justify-content:space-between">
@@ -407,136 +399,146 @@ body{
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ==================== 常量 ====================
-const SHIFT_TYPES = ['门诊药房','住院药房','上午+夜班','休息','休息','休息'];
-const SHIFT_ICON = {'门诊药房':'💊','住院药房':'🏨','上午+夜班':'🌙','休息':'🏠'};
-const SHIFT_DESC = {
-  '门诊药房':'全天 · 门诊药房值班',
-  '住院药房':'全天 · 住院药房值班',
-  '上午+夜班':'上午半天班 + 18:00→次日8:00 夜班',
-  '休息':'今天休息 🎉'
+// ==================== 班次定义 ====================
+// 所有可能的班次（用于调班选项和显示）
+const SHIFT_DEF = {
+  '门诊药房': { icon:'💊', time:'9:00上班', color:'门诊', desc:'门诊药房 · 9:00上班', isRest:false },
+  '住院药房': { icon:'🏨', time:'9:00上班', color:'住院', desc:'住院药房 · 9:00上班', isRest:false },
+  '上午班':    { icon:'☀️', time:'8:00-12:00', color:'上午', desc:'上午班 · 8:00-12:00', isRest:false },
+  '夜班':     { icon:'🌙', time:'18:00-次日8:00', color:'夜班', desc:'夜班 · 18:00→次日8:00', isRest:false },
+  '休息':     { icon:'🏠', time:'', color:'休息', desc:'休息 🎉', isRest:true },
+  '武侯院区': { icon:'🏥', time:'', color:'武侯', desc:'武侯院区', isRest:false },
 };
-const SHIFT_CLASS = {'门诊药房':'门诊','住院药房':'住院','上午+夜班':'夜班','休息':'休息'};
 
-const STORAGE_MEMBERS = 'schedule_members_v2';
-const STORAGE_SWAPS = 'schedule_swaps_v2';
+// 调班可选目标
+const SWAP_OPTIONS = ['门诊药房','住院药房','上午班','夜班','休息','武侯院区'];
+
+// 6天轮班周期：每天包含哪些默认段次
+// Day0=门诊药房, Day1=住院药房, Day2=上午班+夜班, Day3-5=休息
+const CYCLE_SLOTS = [
+  ['门诊药房'],
+  ['住院药房'],
+  ['上午班','夜班'],
+  ['休息'],
+  ['休息'],
+  ['休息']
+];
+
+// ==================== 存储键 ====================
+const STORAGE_MEMBERS = 'schedule_members_v3';
+const STORAGE_SWAPS = 'schedule_swaps_v3';
 const STORAGE_REMINDER = 'schedule_reminder_time';
 const STORAGE_SELECTED = 'schedule_selected_member';
 
-const DEFAULT_ANCHOR = '2026-07-13';
 const WEEKDAYS = ['日','一','二','三','四','五','六'];
 
 let currentMonth, currentYear, selectedDayDate, selectedDayMember;
 let selfMemberId = 'self';
 
-// ==================== 数据管理 ====================
+// ==================== 数据函数 ====================
 
 function getDefaultMembers() {
-  // 6人排班，起始日期各错开1天
-  // 顺序：7/13陈晓丽→7/14唐强→7/15侯丽芳→7/16高爽→7/17林文文→7/18何行彪
+  const anchor = new Date('2026-07-13T00:00:00');
   const names = ['陈晓丽','唐强','侯丽芳','高爽','林文文','何行彪'];
-  const anchor = new Date(DEFAULT_ANCHOR + 'T00:00:00');
   return names.map((name, i) => {
     const d = new Date(anchor);
     d.setDate(d.getDate() + i);
-    return {
-      id: i === 0 ? 'self' : 'm' + i,
-      name: name,
-      anchorDate: formatDate(d)
-    };
+    return { id: i===0?'self':'m'+i, name, anchorDate: formatDate(d) };
   });
 }
 
 function getMembers() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_MEMBERS));
-    if (saved && saved.length) {
-      // 确保 'self' 是第一个
-      const selfIdx = saved.findIndex(m => m.id === 'self');
-      if (selfIdx > 0) {
-        const selfM = saved.splice(selfIdx, 1)[0];
-        saved.unshift(selfM);
-      }
-      return saved;
-    }
+    if (saved && saved.length) return saved;
   } catch(e) {}
   return getDefaultMembers();
 }
-
-function saveMembers(members) {
-  localStorage.setItem(STORAGE_MEMBERS, JSON.stringify(members));
-}
-
-function getMyAnchorDate() {
-  const members = getMembers();
-  const self = members.find(m => m.id === 'self');
-  return self ? new Date(self.anchorDate + 'T00:00:00') : new Date(DEFAULT_ANCHOR + 'T00:00:00');
-}
+function saveMembers(m) { localStorage.setItem(STORAGE_MEMBERS, JSON.stringify(m)); }
 
 function getMemberAnchor(memberId) {
   const members = getMembers();
   const m = members.find(x => x.id === memberId);
   if (m) return new Date(m.anchorDate + 'T00:00:00');
-  return getMyAnchorDate(); // fallback
+  return new Date('2026-07-13T00:00:00');
 }
 
-function getOriginalShift(date, memberId) {
+/** 获取某人在某天的默认段次列表 */
+function getDefaultSlots(date, memberId) {
   const anchor = getMemberAnchor(memberId);
   const diffDays = Math.floor((date.getTime() - anchor.getTime()) / (1000*60*60*24));
-  const idx = ((diffDays % 6) + 6) % 6;
-  return SHIFT_TYPES[idx];
+  const cycleDay = ((diffDays % 6) + 6) % 6;
+  return CYCLE_SLOTS[cycleDay].map(shiftName => ({
+    shiftName,
+    ...SHIFT_DEF[shiftName]
+  }));
 }
 
 function getSwaps() {
   try { return JSON.parse(localStorage.getItem(STORAGE_SWAPS) || '{}'); }
   catch(e) { return {}; }
 }
-
 function setSwaps(s) { localStorage.setItem(STORAGE_SWAPS, JSON.stringify(s)); }
 
-function getActualShift(date, memberId) {
+/** 复合键: dateStr|shiftName */
+function slotKey(dateStr, shiftName) { return dateStr + '|' + shiftName; }
+
+/** 获取某人在某天的实际段次（考虑调班） */
+function getActualSlots(date, memberId) {
+  const defaults = getDefaultSlots(date, memberId);
+  const swaps = getSwaps();
+  const memberSwaps = swaps[memberId] || {};
   const dateStr = formatDate(date);
-  const swaps = getSwaps();
-  if (swaps[memberId] && swaps[memberId][dateStr]) {
-    return swaps[memberId][dateStr].newShift;
-  }
-  return getOriginalShift(date, memberId);
+
+  return defaults.map(def => {
+    const key = slotKey(dateStr, def.shiftName);
+    if (memberSwaps[key]) {
+      const sw = memberSwaps[key];
+      return {
+        ...def,
+        originalName: def.shiftName,
+        shiftName: sw.newShift,
+        swapped: true,
+        swapNote: sw.note || '',
+        ...SHIFT_DEF[sw.newShift]
+      };
+    }
+    return { ...def, originalName: def.shiftName, swapped: false, swapNote: '' };
+  });
 }
 
-function getSwapInfoByStr(dateStr, memberId) {
-  const swaps = getSwaps();
-  if (swaps[memberId] && swaps[memberId][dateStr]) return swaps[memberId][dateStr];
-  return null;
+/** 获取某人在某天的主班次（用于日历颜色等） */
+function getPrimaryShift(date, memberId) {
+  const slots = getActualSlots(date, memberId);
+  // 优先返回非休息的第一个段
+  const work = slots.find(s => !s.isRest);
+  return work ? work.shiftName : '休息';
 }
 
-function isSwapped(date, memberId) {
-  return !!getSwapInfoByStr(formatDate(date), memberId);
+function getPrimaryColor(date, memberId) {
+  const shift = getPrimaryShift(date, memberId);
+  return SHIFT_DEF[shift] ? SHIFT_DEF[shift].color : '休息';
 }
 
-// ==================== 工具 ====================
+// ==================== 工具函数 ====================
 function formatDate(d) {
   const y = d.getFullYear();
   const m = String(d.getMonth()+1).padStart(2,'0');
   const day = String(d.getDate()).padStart(2,'0');
   return `${y}-${m}-${day}`;
 }
-
 function today() {
   const n = new Date();
   return new Date(n.getFullYear(), n.getMonth(), n.getDate());
 }
-
 function isSameDay(a, b) {
   return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
 }
-
-function getStoredSelected() {
-  return localStorage.getItem(STORAGE_SELECTED) || 'self';
-}
+function getStoredSelected() { return localStorage.getItem(STORAGE_SELECTED) || 'self'; }
+function escHtml(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
 // ==================== 渲染：今日团队 ====================
 function renderTeamToday() {
@@ -547,16 +549,23 @@ function renderTeamToday() {
   const stored = getStoredSelected();
 
   grid.innerHTML = members.map(m => {
-    const shift = getActualShift(t, m.id);
+    const slots = getActualSlots(t, m.id);
     const isSelf = m.id === 'self';
     const isStored = m.id === stored;
-    return `<div class="team-member-card card-${SHIFT_CLASS[shift]} ${isSelf?'self-card':''}"
+    const primaryColor = getPrimaryColor(t, m.id);
+
+    let shiftHtml = slots.map(s => {
+      const swMark = s.swapped ? ' 🔄' : '';
+      return `<div class="mem-shift">${s.icon} ${s.shiftName}${swMark}</div>
+              <div class="mem-time">${s.time}</div>`;
+    }).join('');
+
+    return `<div class="team-member-card card-${primaryColor} ${isSelf?'self-card':''}"
                 onclick="selectMember('${m.id}')"
                 style="${isStored && !isSelf ? 'border-color:#5C6BC0;box-shadow:0 0 0 2px rgba(92,107,192,.2)' : ''}">
       ${isSelf ? '<span class="mem-badge">我</span>' : ''}
       <div class="mem-name">${isSelf ? '⭐ ' : ''}${escHtml(m.name)}</div>
-      <div class="mem-shift">${SHIFT_ICON[shift]} ${shift}</div>
-      <div class="mem-desc">${SHIFT_DESC[shift]}</div>
+      ${shiftHtml}
     </div>`;
   }).join('');
 }
@@ -568,13 +577,16 @@ function renderDetail(memberId) {
   const members = getMembers();
   const m = members.find(x => x.id === memberId);
   if (!m) return;
-  const shift = getActualShift(t, memberId);
-  const card = document.getElementById('detailCard');
-  card.className = 'detail-card shift-' + SHIFT_CLASS[shift];
-  document.getElementById('detailIcon').textContent = SHIFT_ICON[shift];
-  document.getElementById('detailShift').textContent = m.name + ' · ' + shift;
-  document.getElementById('detailDate').textContent = formatDate(t) + ' 星期' + WEEKDAYS[t.getDay()];
-  document.getElementById('detailDesc').textContent = SHIFT_DESC[shift];
+  const slots = getActualSlots(t, memberId);
+  const slotsDiv = document.getElementById('detailSlots');
+  slotsDiv.innerHTML = slots.map(s => {
+    const colorCls = 'dslot-' + SHIFT_DEF[s.shiftName].color;
+    return `<div class="detail-slot ${colorCls}">
+      <div class="slot-name">${s.icon} ${s.shiftName}${s.swapped?' 🔄':''}</div>
+      <div class="slot-time">${s.time}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('detailDate').textContent = m.name + ' · ' + formatDate(t) + ' 星期' + WEEKDAYS[t.getDay()];
 }
 
 function selectMember(memberId) {
@@ -595,7 +607,7 @@ function renderWeekTable() {
   }
 
   let html = '<thead><tr><th>成员</th>';
-  days.forEach((d, i) => {
+  days.forEach(d => {
     const isT = isSameDay(d, t);
     html += `<th class="${isT?'col-today':''}">星期${WEEKDAYS[d.getDay()]}<br><span class="col-date">${d.getMonth()+1}/${d.getDate()}</span></th>`;
   });
@@ -605,9 +617,14 @@ function renderWeekTable() {
     const isSelf = m.id === 'self';
     html += `<tr><td class="mem-col ${isSelf?'self-row':''}">${isSelf?'⭐ ':''}${escHtml(m.name)}</td>`;
     days.forEach(d => {
-      const shift = getActualShift(d, m.id);
-      const sw = isSwapped(d, m.id);
-      html += `<td class="cell-${SHIFT_CLASS[shift]} ${sw ? 'cell-swapped' : ''} ${isSameDay(d,t) ? 'col-today' : ''}">${shift}</td>`;
+      const slots = getActualSlots(d, m.id);
+      const isT = isSameDay(d, t);
+      const cellContent = slots.map(s => {
+        const color = SHIFT_DEF[s.shiftName].color;
+        const swClass = s.swapped ? ' cell-swapped' : '';
+        return `<span class="slot-line cell-${color}${swClass}">${s.icon} ${s.shiftName}${s.swapped?' 🔄':''}</span>`;
+      }).join('');
+      html += `<td class="${isT?'col-today':''}" style="padding:4px 3px">${cellContent}</td>`;
     });
     html += '</tr>';
   });
@@ -635,22 +652,33 @@ function renderCalendar() {
   // 上月尾巴
   for (let i = startDow - 1; i >= 0; i--) {
     const d = new Date(currentYear, currentMonth-1, prevLast.getDate() - i);
-    const shift = getActualShift(d, memberId);
-    html += `<div class="day-cell other-month cell-${SHIFT_CLASS[shift]}" title="${formatDate(d)} ${shift}">
-      <span class="cell-num">${d.getDate()}</span><span class="cell-label">${shift}</span></div>`;
+    const priColor = getPrimaryColor(d, memberId);
+    const priShift = getPrimaryShift(d, memberId);
+    html += `<div class="day-cell other-month cell-${priColor}" title="${formatDate(d)}">
+      <span class="cell-num">${d.getDate()}</span><span class="cell-shift">${priShift}</span></div>`;
   }
 
   // 当月
   for (let day = 1; day <= lastDay.getDate(); day++) {
     const d = new Date(currentYear, currentMonth, day);
-    const shift = getActualShift(d, memberId);
-    const sw = isSwapped(d, memberId);
-    let cls = `day-cell cell-${SHIFT_CLASS[shift]}`;
+    const slots = getActualSlots(d, memberId);
+    const priColor = getPrimaryColor(d, memberId);
+    const hasSwap = slots.some(s => s.swapped);
+    const isMulti = slots.length > 1;
+    let cls = `day-cell cell-${priColor}`;
     if (isSameDay(d, t)) cls += ' today';
-    if (sw) cls += ' swapped';
+    if (hasSwap) cls += ' swapped';
+    if (isMulti) cls += ' multi-slot';
+
+    const shiftLabel = slots.map(s => {
+      const sw = s.swapped ? '🔄' : '';
+      return s.shiftName + sw;
+    }).join('\n');
+
     html += `<div class="${cls}" data-date="${formatDate(d)}"
              onclick="openDayModal('${formatDate(d)}','${memberId}')">
-      <span class="cell-num">${day}</span><span class="cell-label">${shift}</span></div>`;
+      <span class="cell-num">${day}</span>
+      <span class="cell-shift">${escHtml(shiftLabel)}</span></div>`;
   }
 
   // 下月头
@@ -658,9 +686,10 @@ function renderCalendar() {
   const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
   for (let i = 1; i <= remaining; i++) {
     const d = new Date(currentYear, currentMonth+1, i);
-    const shift = getActualShift(d, memberId);
-    html += `<div class="day-cell other-month cell-${SHIFT_CLASS[shift]}" title="${formatDate(d)}">
-      <span class="cell-num">${i}</span><span class="cell-label">${shift}</span></div>`;
+    const priColor = getPrimaryColor(d, memberId);
+    const priShift = getPrimaryShift(d, memberId);
+    html += `<div class="day-cell other-month cell-${priColor}" title="${formatDate(d)}">
+      <span class="cell-num">${i}</span><span class="cell-shift">${priShift}</span></div>`;
   }
   grid.innerHTML = html;
 
@@ -679,31 +708,32 @@ function renderSwapLog() {
   members.forEach(m => memberMap[m.id] = m.name);
 
   const entries = [];
-  Object.entries(swaps).forEach(([mid, dates]) => {
-    Object.entries(dates).forEach(([ds, info]) => {
-      entries.push({ memberId: mid, dateStr: ds, ...info });
+  Object.entries(swaps).forEach(([mid, keys]) => {
+    Object.entries(keys).forEach(([key, info]) => {
+      const [dateStr, slotName] = key.split('|');
+      entries.push({ memberId: mid, dateStr, slotName, ...info });
     });
   });
   entries.sort((a, b) => b.dateStr.localeCompare(a.dateStr));
 
   const cutoff = new Date(today());
-  cutoff.setDate(cutoff.getDate() - 60);
+  cutoff.setDate(cutoff.getDate() - 90);
   const recent = entries.filter(e => new Date(e.dateStr + 'T00:00:00') >= cutoff);
 
   if (!recent.length) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">暂无调班记录</td></tr>';
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">暂无调班记录</td></tr>';
     return;
   }
 
   tbody.innerHTML = recent.map(e => {
-    const orig = getOriginalShift(new Date(e.dateStr + 'T00:00:00'), e.memberId);
     const name = memberMap[e.memberId] || e.memberId;
+    const cnt = SHIFT_DEF[e.newShift] ? SHIFT_DEF[e.newShift].color : '休息';
     return `<tr>
-      <td>${escHtml(name)}</td><td>${e.dateStr}</td>
-      <td><span class="badge badge-${SHIFT_CLASS[orig]}">${orig}</span></td>
-      <td><span class="badge badge-${SHIFT_CLASS[e.newShift]}">${e.newShift}</span></td>
+      <td>${escHtml(name)}</td><td>${e.dateStr}</td><td>${e.slotName}</td>
+      <td><span class="badge badge-${cnt}">${e.newShift}</span></td>
+      <td><span class="badge badge-${cnt}">${e.newShift}</span></td>
       <td>${escHtml(e.note || '—')}</td>
-      <td><button class="btn btn-danger btn-xs" onclick="deleteSwap('${e.memberId}','${e.dateStr}')">删除</button></td>
+      <td><button class="btn btn-danger btn-xs" onclick="deleteSwap('${e.memberId}','${escHtml(e.dateStr)}','${escHtml(e.slotName)}')">删除</button></td>
     </tr>`;
   }).join('');
 }
@@ -731,14 +761,13 @@ function goToday() {
   renderAll();
 }
 
-// ==================== 调班弹窗 ====================
+// ==================== 调班弹窗（支持多段） ====================
 function openDayModal(dateStr, memberId) {
   selectedDayDate = dateStr;
   selectedDayMember = memberId;
   const d = new Date(dateStr + 'T00:00:00');
-  const orig = getOriginalShift(d, memberId);
-  const actual = getActualShift(d, memberId);
-  const swap = getSwapInfoByStr(dateStr, memberId);
+  const slots = getActualSlots(d, memberId);
+  const defaults = getDefaultSlots(d, memberId);
 
   const members = getMembers();
   const m = members.find(x => x.id === memberId);
@@ -747,88 +776,100 @@ function openDayModal(dateStr, memberId) {
     `<option value="${x.id}" ${x.id===memberId?'selected':''}>${x.name}</option>`
   ).join('');
   document.getElementById('dayModalDate').value = dateStr;
-  document.getElementById('dayModalCurrentShift').value = actual + (swap ? ' (已调班，原: ' + orig + ')' : '');
-  document.getElementById('dayModalNewShift').value = '';
-  document.getElementById('dayModalNote').value = '';
+  document.getElementById('dayModalSlotCount').textContent = slots.length;
 
-  if (swap) {
-    document.getElementById('dayModalSwapNoteGroup').style.display = 'block';
-    document.getElementById('dayModalCurrentNote').value = swap.note || '';
-    document.getElementById('dayModalResetBtn').style.display = 'inline-flex';
-  } else {
-    document.getElementById('dayModalSwapNoteGroup').style.display = 'none';
-    document.getElementById('dayModalResetBtn').style.display = 'none';
-  }
+  // 每个段次一个卡片
+  const slotsDiv = document.getElementById('dayModalSlots');
+  slotsDiv.innerHTML = slots.map((s, i) => {
+    const color = SHIFT_DEF[s.shiftName].color;
+    const defaultShiftName = defaults[i] ? defaults[i].shiftName : s.shiftName;
+    const swapKey = slotKey(dateStr, s.originalName || defaultShiftName);
+    const hasSwap = s.swapped;
+
+    let optHtml = SWAP_OPTIONS.map(opt => {
+      const sel = opt === s.shiftName ? 'selected' : '';
+      return `<option value="${opt}" ${sel}>${SHIFT_DEF[opt].icon} ${opt}${SHIFT_DEF[opt].time ? ' · '+SHIFT_DEF[opt].time : ''}</option>`;
+    }).join('');
+
+    return `<div class="slot-card slot-card-${color} ${hasSwap?'swapped-slot':''}">
+      <div class="slot-header">
+        <span class="slot-title">📌 段次${i+1}：${s.originalName||defaultShiftName}</span>
+        <span class="slot-time">${SHIFT_DEF[s.shiftName].time}</span>
+      </div>
+      <div class="slot-current">当前：<b>${s.icon} ${s.shiftName}</b>${hasSwap ? ' 🔄已调班' : ''}</div>
+      ${hasSwap && s.swapNote ? `<div style="font-size:.78em;color:var(--text2)">备注：${escHtml(s.swapNote)}</div>` : ''}
+      <div style="display:flex;gap:6px;margin-top:6px;align-items:center;flex-wrap:wrap">
+        <select data-slot="${s.originalName||defaultShiftName}" class="slot-swap-select" style="flex:1;min-width:120px">
+          ${optHtml}
+        </select>
+        <input type="text" class="slot-swap-note" placeholder="备注（选填）" value="${escHtml(hasSwap?s.swapNote:'')}"
+               style="flex:1.5;min-width:100px;padding:7px 10px;border:1.5px solid #ddd;border-radius:8px;font-size:.85em">
+        <button class="btn btn-primary btn-xs" onclick="saveSlotSwap(this, '${escHtml(dateStr)}', '${memberId}', '${escHtml(s.originalName||defaultShiftName)}')">保存</button>
+        ${hasSwap ? `<button class="btn btn-danger btn-xs" onclick="resetSlotSwap('${escHtml(dateStr)}', '${memberId}', '${escHtml(s.originalName||defaultShiftName)}')">恢复</button>` : ''}
+      </div>
+    </div>`;
+  });
+
   document.getElementById('dayModal').classList.add('active');
+}
+
+function saveSlotSwap(btn, dateStr, memberId, slotName) {
+  const card = btn.closest('.slot-card');
+  const select = card.querySelector('.slot-swap-select');
+  const noteInput = card.querySelector('.slot-swap-note');
+  const newShift = select.value;
+  const note = noteInput.value.trim();
+  const d = new Date(dateStr + 'T00:00:00');
+  const defaults = getDefaultSlots(d, memberId);
+  const defSlot = defaults.find(s => s.shiftName === slotName);
+  if (!defSlot) return;
+
+  const swaps = getSwaps();
+  if (!swaps[memberId]) swaps[memberId] = {};
+  const key = slotKey(dateStr, slotName);
+
+  if (newShift === slotName) {
+    delete swaps[memberId][key];
+    if (!Object.keys(swaps[memberId]).length) delete swaps[memberId];
+    showToast('↩ 已恢复: ' + slotName);
+  } else {
+    swaps[memberId][key] = { newShift, note };
+    showToast('✅ 已调班: ' + slotName + ' → ' + newShift);
+  }
+  setSwaps(swaps);
+  renderAll();
+  // 刷新弹窗内容
+  openDayModal(dateStr, memberId);
+}
+
+function resetSlotSwap(dateStr, memberId, slotName) {
+  const swaps = getSwaps();
+  const key = slotKey(dateStr, slotName);
+  if (swaps[memberId]) {
+    delete swaps[memberId][key];
+    if (!Object.keys(swaps[memberId]).length) delete swaps[memberId];
+  }
+  setSwaps(swaps);
+  showToast('↩ 已恢复: ' + slotName);
+  renderAll();
+  openDayModal(dateStr, memberId);
 }
 
 function onSwapMemberChange() {
   const mid = document.getElementById('dayModalMember').value;
   if (!selectedDayDate) return;
-  const d = new Date(selectedDayDate + 'T00:00:00');
-  const orig = getOriginalShift(d, mid);
-  const actual = getActualShift(d, mid);
-  const swap = getSwapInfoByStr(selectedDayDate, mid);
-  document.getElementById('dayModalCurrentShift').value = actual + (swap ? ' (已调班，原: ' + orig + ')' : '');
-  if (swap) {
-    document.getElementById('dayModalSwapNoteGroup').style.display = 'block';
-    document.getElementById('dayModalCurrentNote').value = swap.note || '';
-    document.getElementById('dayModalResetBtn').style.display = 'inline-flex';
-  } else {
-    document.getElementById('dayModalSwapNoteGroup').style.display = 'none';
-    document.getElementById('dayModalResetBtn').style.display = 'none';
-  }
-  document.getElementById('dayModalNewShift').value = '';
-  document.getElementById('dayModalNote').value = '';
   selectedDayMember = mid;
+  openDayModal(selectedDayDate, mid);
 }
 
 function closeDayModal() { document.getElementById('dayModal').classList.remove('active'); }
 
-function saveSwap() {
-  if (!selectedDayDate || !selectedDayMember) return;
-  const newShift = document.getElementById('dayModalNewShift').value;
-  const note = document.getElementById('dayModalNote').value.trim();
-  const d = new Date(selectedDayDate + 'T00:00:00');
-  const orig = getOriginalShift(d, selectedDayMember);
-  const swaps = getSwaps();
-
-  if (!newShift) { showToast('未做更改'); closeDayModal(); return; }
-  if (!swaps[selectedDayMember]) swaps[selectedDayMember] = {};
-
-  if (newShift === orig) {
-    delete swaps[selectedDayMember][selectedDayDate];
-    if (!Object.keys(swaps[selectedDayMember]).length) delete swaps[selectedDayMember];
-    setSwaps(swaps);
-    showToast('✅ 已恢复原班次: ' + orig);
-  } else {
-    swaps[selectedDayMember][selectedDayDate] = { newShift, note };
-    setSwaps(swaps);
-    showToast('✅ 已调班: ' + orig + ' → ' + newShift);
-  }
-  closeDayModal();
-  renderAll();
-}
-
-function resetSwap() {
-  if (!selectedDayDate || !selectedDayMember) return;
-  const swaps = getSwaps();
-  const orig = getOriginalShift(new Date(selectedDayDate + 'T00:00:00'), selectedDayMember);
-  if (swaps[selectedDayMember]) {
-    delete swaps[selectedDayMember][selectedDayDate];
-    if (!Object.keys(swaps[selectedDayMember]).length) delete swaps[selectedDayMember];
-  }
-  setSwaps(swaps);
-  showToast('↩ 已恢复原班次: ' + orig);
-  closeDayModal();
-  renderAll();
-}
-
-function deleteSwap(memberId, dateStr) {
+function deleteSwap(memberId, dateStr, slotName) {
   if (!confirm('确定删除该调班记录吗？')) return;
   const swaps = getSwaps();
+  const key = slotKey(dateStr, slotName);
   if (swaps[memberId]) {
-    delete swaps[memberId][dateStr];
+    delete swaps[memberId][key];
     if (!Object.keys(swaps[memberId]).length) delete swaps[memberId];
   }
   setSwaps(swaps);
@@ -840,13 +881,12 @@ function deleteSwap(memberId, dateStr) {
 function openSettings() {
   const members = getMembers();
   const self = members.find(m => m.id === 'self');
-  document.getElementById('settingsMyAnchor').value = self ? self.anchorDate : DEFAULT_ANCHOR;
+  document.getElementById('settingsMyAnchor').value = self ? self.anchorDate : '2026-07-13';
   document.getElementById('settingsReminderTime').value = localStorage.getItem(STORAGE_REMINDER) || '08:00';
   document.getElementById('settingsModal').classList.add('active');
   switchTab('my');
   renderTeamEditList();
 }
-
 function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
 
 function switchTab(name) {
@@ -865,26 +905,20 @@ function renderTeamEditList() {
       <span class="mem-index">${i+1}</span>
       <input type="text" value="${escHtml(m.name)}" data-mid="${m.id}" class="mem-name-input" placeholder="姓名" style="flex:1.5">
       <input type="date" value="${m.anchorDate}" data-mid="${m.id}" class="mem-anchor-input" style="flex:2" title="第1天=门诊药房的日期">
-      ${m.id !== 'self' ? `<button class="btn btn-danger btn-xs" onclick="removeMemberRow(this, '${m.id}')">✕</button>` : '<span style="font-size:.75em;color:var(--text2)">(我)</span>'}
+      ${m.id !== 'self' ? `<button class="btn btn-danger btn-xs" onclick="this.closest('.member-edit-row').remove()">✕</button>` : '<span style="font-size:.75em;color:var(--text2)">(我)</span>'}
     </div>
   `).join('');
 }
 
-function removeMemberRow(btn, memberId) {
-  if (!confirm('确定移除此成员吗？')) return;
-  btn.closest('.member-edit-row').remove();
-}
-
 function autoFillStaggered() {
-  // 自动填充6人
   const names = ['陈晓丽','唐强','侯丽芳','高爽','林文文','何行彪'];
   const nameInputs = document.querySelectorAll('.mem-name-input');
   const anchorInputs = document.querySelectorAll('.mem-anchor-input');
-  const myAnchorStr = document.getElementById('settingsMyAnchor').value || DEFAULT_ANCHOR;
-  const base = new Date(myAnchorStr + 'T00:00:00');
+  const baseStr = document.getElementById('settingsMyAnchor').value || '2026-07-13';
+  const base = new Date(baseStr + 'T00:00:00');
 
   for (let i = 0; i < Math.min(6, nameInputs.length); i++) {
-    nameInputs[i].value = names[i] || '同事' + (i+1);
+    nameInputs[i].value = names[i] || '成员'+(i+1);
     const d = new Date(base);
     d.setDate(d.getDate() + i);
     anchorInputs[i].value = formatDate(d);
@@ -902,7 +936,7 @@ function saveMySettings() {
   else members.unshift({ id: 'self', name: '我', anchorDate: anchorStr });
   saveMembers(members);
   localStorage.setItem(STORAGE_REMINDER, reminderTime);
-  showToast('✅ 我的设置已保存');
+  showToast('✅ 设置已保存');
   closeSettings();
   renderAll();
   scheduleReminder();
@@ -913,20 +947,18 @@ function saveTeamSettings() {
   const anchorInputs = document.querySelectorAll('.mem-anchor-input');
   const members = [];
   nameInputs.forEach((ni, i) => {
-    const mid = ni.dataset.mid;
     const anchor = anchorInputs[i] ? anchorInputs[i].value : '';
     if (anchor) {
       members.push({
-        id: mid,
-        name: ni.value.trim() || '成员' + (i+1),
+        id: ni.dataset.mid,
+        name: ni.value.trim() || '成员'+(i+1),
         anchorDate: anchor
       });
     }
   });
-  if (members.length === 0) { showToast('⚠️ 至少保留一个成员'); return; }
-  // 确保有 self
+  if (!members.length) { showToast('⚠️ 至少保留一个成员'); return; }
   if (!members.find(m => m.id === 'self')) {
-    members.unshift({ id: 'self', name: '我', anchorDate: document.getElementById('settingsMyAnchor').value || DEFAULT_ANCHOR });
+    members.unshift({ id: 'self', name: '陈晓丽', anchorDate: document.getElementById('settingsMyAnchor').value || '2026-07-13' });
   }
   saveMembers(members);
   showToast('✅ 团队设置已保存 (' + members.length + '人)');
@@ -943,22 +975,24 @@ function exportICS() {
   let ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Hospital Schedule//CN','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:医院排班'];
 
   const d = new Date(today());
-  d.setDate(d.getDate() - 7); // 从7天前开始
+  d.setDate(d.getDate() - 7);
   while (d <= endDate) {
     const dateStr = formatDate(d).replace(/-/g,'');
     const next = new Date(d); next.setDate(next.getDate()+1);
     const nextStr = formatDate(next).replace(/-/g,'');
 
     members.forEach(m => {
-      const shift = getActualShift(d, m.id);
-      const sw = isSwapped(d, m.id);
-      const summary = (sw ? '🔄' : '') + m.name + ': ' + shift;
-      ics.push('BEGIN:VEVENT');
-      ics.push('DTSTART;VALUE=DATE:' + dateStr);
-      ics.push('DTEND;VALUE=DATE:' + nextStr);
-      ics.push('SUMMARY:' + summary);
-      if (shift === '上午+夜班') ics.push('DESCRIPTION:上午半天班 + 18:00至次日8:00夜班');
-      ics.push('END:VEVENT');
+      const slots = getActualSlots(d, m.id);
+      slots.forEach(s => {
+        if (s.isRest) return; // 休息不导出
+        const summary = (s.swapped?'🔄':'') + m.name + ': ' + s.shiftName;
+        ics.push('BEGIN:VEVENT');
+        ics.push('DTSTART;VALUE=DATE:' + dateStr);
+        ics.push('DTEND;VALUE=DATE:' + nextStr);
+        ics.push('SUMMARY:' + summary);
+        if (s.time) ics.push('DESCRIPTION:' + s.time);
+        ics.push('END:VEVENT');
+      });
     });
     d.setDate(d.getDate() + 1);
   }
@@ -970,7 +1004,7 @@ function exportICS() {
   a.href = url; a.download = '医院排班_团队_' + formatDate(today()) + '.ics';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  showToast('📱 团队日历文件已下载！包含所有成员的班次');
+  showToast('📱 团队日历已下载（含所有班次段）');
 }
 
 // ==================== 提醒 ====================
@@ -987,26 +1021,19 @@ function scheduleReminder() {
   const now = new Date();
   const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
   if (target <= now) target.setDate(target.getDate() + 1);
-  const delay = target.getTime() - now.getTime();
-  reminderTimer = setTimeout(() => { sendNotification(); scheduleReminder(); }, delay);
+  reminderTimer = setTimeout(() => { sendNotification(); scheduleReminder(); }, target.getTime() - now.getTime());
 }
 function sendNotification() {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
   const t = today();
-  const shift = getActualShift(t, 'self');
+  const slots = getActualSlots(t, 'self');
+  const summary = slots.map(s => s.shiftName).join(' + ');
+  const body = formatDate(t) + ' · ' + summary;
   new Notification('🏥 今日班次提醒', {
-    body: `${formatDate(t)} · ${shift}\n${SHIFT_DESC[shift]}`,
+    body,
     icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🏥</text></svg>',
     tag: 'daily-shift',
   });
-}
-
-// ==================== 工具函数 ====================
-function escHtml(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._to); t._to = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 // ==================== 事件 ====================
@@ -1021,6 +1048,12 @@ document.addEventListener('keydown', e => {
 document.getElementById('dayModal').addEventListener('click', function(e) { if (e.target===this) closeDayModal(); });
 document.getElementById('settingsModal').addEventListener('click', function(e) { if (e.target===this) closeSettings(); });
 
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._to); t._to = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
 // ==================== 初始化 ====================
 function init() {
   const t = today();
@@ -1028,7 +1061,6 @@ function init() {
   currentYear = t.getFullYear();
   selfMemberId = getStoredSelected();
 
-  // 确保有默认成员
   if (!localStorage.getItem(STORAGE_MEMBERS)) {
     saveMembers(getDefaultMembers());
   }
@@ -1037,7 +1069,6 @@ function init() {
   requestNotificationPermission();
   scheduleReminder();
 
-  // 注册 SW
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(()=>{});
   }
